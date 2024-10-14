@@ -1,0 +1,28 @@
+- hosts: all
+  become: true
+  pre_tasks:
+
+  - name: Update Repository Index (CentOS)
+    tags: always
+    dnf:
+      update_cache: yes
+    changed_when: false
+    when: ansible_distribution == "CentOS"
+
+  - name: Install Epel-release (CentOS)
+    tags: always
+    dnf:
+    name: epel-release
+    when: ansible_distribution == "CentOS"
+
+  - name: Install Update (Ubuntu)
+    tags: always
+    apt:
+      update_cache: yes
+    changed_when: false
+    when: ansible_distribution == "Ubuntu"
+
+- hosts: servers
+  become: true
+  roles:
+    - servers  
